@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FraudShield Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--dominant:#CFA45F;--secondary:#387D32;--accent:#F5972D;--bg:#FBF5E8;--bg2:#F1E0BC;--surface:#FFF9EF;--ink:#271F11;--muted:#6E5E42;--line:rgba(56,125,50,.16);--shadow:0 24px 70px rgba(75,56,18,.12);--radius:22px}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:'Sora',sans-serif;color:var(--ink);background:radial-gradient(circle at 0 0,rgba(207,164,95,.35),transparent 28%),radial-gradient(circle at 100% 10%,rgba(245,151,45,.18),transparent 22%),linear-gradient(180deg,#FBF6EB 0%,#F2E2BE 44%,#FAF4E7 100%)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(56,125,50,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(56,125,50,.03) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(180deg,rgba(0,0,0,.45),transparent 72%)}
+a{color:inherit}
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,249,239,.84);backdrop-filter:blur(18px);border-bottom:1px solid rgba(56,125,50,.12)}
+.nav-inner,.page{max-width:1220px;margin:0 auto;padding:0 1.2rem}
+.nav-inner{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.9rem}.mark{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,var(--secondary),#2F632A);color:#FFF8EB;font-weight:700;box-shadow:0 14px 28px rgba(56,125,50,.22)}
+.brand strong{display:block;font-size:.98rem;letter-spacing:-.03em}.brand span{display:block;margin-top:.18rem;color:var(--muted);font-size:.74rem}
+.nav-meta{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}.pill,.nav-link{border-radius:999px;padding:.72rem 1rem;font-size:.74rem;text-decoration:none}
+.pill{background:rgba(56,125,50,.1);border:1px solid rgba(56,125,50,.16);color:var(--secondary);font-family:'IBM Plex Mono',monospace}
+.nav-link{background:var(--surface);border:1px solid rgba(56,125,50,.14);color:var(--secondary);font-weight:600}
+.page{padding-top:2rem;padding-bottom:4rem}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:1.1rem;margin-bottom:1.2rem}
+.hero-card,.hero-side,.workspace,.panel,.table-card{background:rgba(255,249,239,.92);border:1px solid rgba(56,125,50,.14);border-radius:28px;box-shadow:var(--shadow)}
+.hero-card{padding:2rem;background:radial-gradient(circle at top right,rgba(245,151,45,.2),transparent 34%),linear-gradient(145deg,rgba(255,249,239,.98),rgba(245,229,191,.95))}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:999px;background:rgba(56,125,50,.1);border:1px solid rgba(56,125,50,.14);color:var(--secondary);font-family:'IBM Plex Mono',monospace;font-size:.71rem;text-transform:uppercase;letter-spacing:.08em}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(245,151,45,.12)}
+.hero-card h1{margin:1rem 0 .8rem;font-size:clamp(2.2rem,5vw,3.7rem);line-height:1.02;letter-spacing:-.05em;max-width:11ch}.hero-card h1 span{color:var(--secondary)}
+.hero-card p,.hero-side p,.head p,.note,.download-meta,.subcopy{color:var(--muted);line-height:1.8}
+.chips{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.3rem}.chip{padding:.65rem .85rem;border-radius:999px;border:1px solid rgba(56,125,50,.12);background:rgba(255,255,255,.56);font-size:.75rem}
+.hero-side{padding:1.35rem;background:linear-gradient(180deg,rgba(56,125,50,.96),rgba(40,91,36,.98));color:#F7F1E1}.hero-side p{color:rgba(247,241,225,.74);font-size:.84rem}
+.stat{padding:1rem;border-radius:18px;background:rgba(255,248,235,.09);border:1px solid rgba(255,248,235,.12);margin-top:.8rem}.stat .k{font-family:'IBM Plex Mono',monospace;font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(247,241,225,.62)} .stat .v{margin-top:.45rem;font-size:1.6rem;font-weight:700;letter-spacing:-.05em}
+.messages{display:grid;gap:.8rem;margin-bottom:1.2rem}.message{padding:1rem 1.1rem;border-radius:18px;font-size:.84rem;line-height:1.7}.message strong{display:block;margin-bottom:.2rem;font-size:.8rem}.error{background:rgba(245,151,45,.12);border:1px solid rgba(245,151,45,.25);color:#8C4E06}.info{background:rgba(56,125,50,.1);border:1px solid rgba(56,125,50,.2);color:var(--secondary)}
+.workspace{overflow:hidden;margin-bottom:1.7rem}.workspace-grid{display:grid;grid-template-columns:.9fr 1.15fr}
+.aside{padding:1.5rem;background:radial-gradient(circle at 25% 10%,rgba(245,151,45,.14),transparent 28%),linear-gradient(180deg,rgba(56,125,50,.95),rgba(46,100,42,.97));color:#FFF7E8}
+.aside h2,.head h2,.results-head h2{margin:0;letter-spacing:-.03em}.aside p{color:rgba(255,247,232,.78);font-size:.85rem;line-height:1.8}
+.steps{display:grid;gap:.75rem;margin-top:1rem}.step{padding:.9rem;border-radius:16px;background:rgba(255,247,232,.08);border:1px solid rgba(255,247,232,.12)}.step span{display:block;margin-bottom:.25rem;font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,247,232,.62)}
+.main{padding:1.5rem;background:linear-gradient(180deg,rgba(255,249,239,.98),rgba(249,239,215,.98))}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}.head h2{font-size:1.16rem}.head p{margin:.4rem 0 0;font-size:.84rem;max-width:620px}
+.toggle{display:inline-flex;padding:.3rem;border-radius:999px;background:rgba(56,125,50,.08);border:1px solid rgba(56,125,50,.12)}
+.mode-btn{border:none;background:transparent;color:var(--secondary);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;padding:.72rem 1rem;border-radius:999px;cursor:pointer}.mode-btn.active{background:var(--secondary);color:#FFF7E8;box-shadow:0 12px 24px rgba(56,125,50,.2)}
+.zones{display:grid;gap:1rem}.zones.dual{grid-template-columns:repeat(2,minmax(0,1fr))}
+.zone{position:relative;display:block;min-height:214px;padding:1.35rem;border-radius:22px;border:1.5px dashed rgba(56,125,50,.28);background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(245,229,191,.56));cursor:pointer}
+.zone input{position:absolute;inset:0;opacity:0;cursor:pointer}.tag{display:inline-block;padding:.38rem .6rem;border-radius:999px;background:rgba(56,125,50,.1);color:var(--secondary);font-family:'IBM Plex Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em}
+.zone h3{margin:1rem 0 .4rem;font-size:1.05rem;letter-spacing:-.03em}.zone p{margin:0;color:var(--muted);font-size:.81rem;line-height:1.74}
+.list{display:grid;gap:.4rem;margin-top:.95rem;color:#6B5426;font-size:.75rem}.list span::before{content:"";display:inline-block;width:6px;height:6px;margin-right:.55rem;border-radius:50%;background:var(--accent);vertical-align:middle}
+.file-selected{display:none;margin-top:1rem;padding:.75rem .85rem;border-radius:14px;background:rgba(56,125,50,.12);color:var(--secondary);font-family:'IBM Plex Mono',monospace;font-size:.72rem}
+.guide{margin-top:1rem;padding:1rem 1.1rem;border-radius:18px;background:rgba(207,164,95,.14);border:1px solid rgba(207,164,95,.32)} .guide strong{display:block;margin-bottom:.3rem;font-size:.82rem}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:1.15rem}.btn-primary,.btn-secondary,.btn-download{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border-radius:999px;padding:.9rem 1.15rem;font-size:.78rem;font-weight:700;text-decoration:none;transition:transform .2s}
+.btn-primary{border:none;background:linear-gradient(135deg,var(--accent),#E88116);color:#2E1C05;box-shadow:0 18px 28px rgba(245,151,45,.26);cursor:pointer}.btn-secondary{background:#FFFDF7;border:1px solid rgba(56,125,50,.16);color:var(--secondary);cursor:pointer}.btn-download{background:rgba(56,125,50,.08);border:1px solid rgba(56,125,50,.16);color:var(--secondary)} .btn-primary:hover,.btn-secondary:hover,.btn-download:hover{transform:translateY(-1px)}
+.results-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}.results-head p{margin:.4rem 0 0;font-size:.84rem}
+.summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem}.card{position:relative;overflow:hidden;padding:1.1rem;border-radius:22px;background:rgba(255,249,239,.92);border:1px solid rgba(56,125,50,.14);box-shadow:0 18px 32px rgba(70,56,18,.08)}.card::after{content:"";position:absolute;right:-28px;bottom:-34px;width:100px;height:100px;border-radius:50%;background:rgba(207,164,95,.12)}
+.card.clickable{cursor:pointer}.card.selected{border-color:rgba(56,125,50,.42);box-shadow:0 24px 40px rgba(56,125,50,.14)}
+.kicker{position:relative;z-index:1;display:inline-block;padding:.38rem .6rem;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.07em;text-transform:uppercase;background:rgba(56,125,50,.08);color:var(--secondary)}
+.value{position:relative;z-index:1;margin-top:.8rem;font-size:1.86rem;font-weight:700;letter-spacing:-.06em}.value.total{color:var(--ink)}.value.high{color:var(--accent)}.value.medium{color:var(--dominant)}.value.low{color:var(--secondary)}.value.pct{color:#8F671E}
+.label{position:relative;z-index:1;margin-top:.3rem;font-size:.76rem;color:var(--muted);line-height:1.6}
+.note{font-size:.78rem;margin:.8rem 0 1rem}
+.panel{display:none;padding:1.15rem;margin-bottom:1rem}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}.panel-title{font-size:1rem;font-weight:700;letter-spacing:-.03em}.panel-meta{margin-top:.3rem;font-size:.78rem;line-height:1.75;color:var(--muted)}.panel-meta code,.download-meta code,.subcopy code{font-family:'IBM Plex Mono',monospace}
+.panel-actions{display:flex;gap:.6rem;flex-wrap:wrap}.risk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem}.risk-item{padding:.9rem;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(245,229,191,.72));border:1px solid rgba(56,125,50,.12)}.risk-item strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:.82rem}.risk-item span{display:block;margin-top:.35rem;color:var(--muted);font-size:.72rem}.empty{display:none;color:var(--muted);font-size:.82rem}
+.table-card{overflow:hidden}.table-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.15rem 1.15rem .9rem}.table-title{font-size:1rem;font-weight:700;letter-spacing:-.03em}.subcopy{margin-top:.35rem;font-size:.78rem;line-height:1.7;color:var(--muted)}
+.download-meta{padding:0 1.15rem 1rem;font-size:.76rem}.download-meta code{display:inline-block;padding:.2rem .4rem;border-radius:8px;background:rgba(56,125,50,.08);color:var(--secondary);font-size:.7rem}
+.wrap{overflow:auto;max-height:560px;border-top:1px solid rgba(56,125,50,.12)} table{width:100%;min-width:720px;border-collapse:collapse}
+thead th{position:sticky;top:0;z-index:2;padding:.95rem 1rem;background:var(--secondary);color:#FDF7EB;font-family:'IBM Plex Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;text-align:left}
+tbody td{padding:.9rem 1rem;border-bottom:1px solid rgba(56,125,50,.08);font-size:.82rem;color:var(--muted)} tbody tr:hover td{background:rgba(207,164,95,.08)}
+.sno,.txn{font-family:'IBM Plex Mono',monospace}.txn{color:var(--ink)}.prob{display:flex;align-items:center;gap:.75rem}.prob-text{min-width:56px;font-weight:700;font-family:'IBM Plex Mono',monospace}.prob-high{color:var(--accent)}.prob-medium{color:#9A772A}.prob-low{color:var(--secondary)}
+.bar{flex:1;height:7px;min-width:78px;border-radius:999px;background:rgba(56,125,50,.12);overflow:hidden}.fill{height:100%;border-radius:999px}.fill-high{background:linear-gradient(90deg,var(--accent),#E57F17)}.fill-medium{background:linear-gradient(90deg,var(--dominant),#BA8B3C)}.fill-low{background:linear-gradient(90deg,var(--secondary),#2F682A)}
+.badge{display:inline-flex;align-items:center;padding:.42rem .7rem;border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.06em}.risk-HIGH{background:rgba(245,151,45,.14);color:#8A4F0A;border:1px solid rgba(245,151,45,.28)}.risk-MEDIUM{background:rgba(207,164,95,.18);color:#7A5A15;border:1px solid rgba(207,164,95,.32)}.risk-NO_RISK{background:rgba(56,125,50,.12);color:var(--secondary);border:1px solid rgba(56,125,50,.22)}
+.pred-1{color:#8A4F0A;font-weight:700}.pred-0{color:var(--secondary);font-weight:700}
+.toast{position:fixed;right:1.2rem;bottom:1.2rem;z-index:50;width:min(360px,calc(100vw - 2.4rem));padding:.95rem 1rem;border-radius:18px;background:rgba(38,30,16,.94);color:#FFF7E8;box-shadow:0 24px 60px rgba(25,20,12,.3);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;font-size:.78rem;line-height:1.7}.toast.show{opacity:1;transform:translateY(0)}
+.footer{margin-top:1.7rem;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.7}
+@media (max-width:1100px){.hero,.workspace-grid{grid-template-columns:1fr}.summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.nav-inner,.page{padding-left:1rem;padding-right:1rem}.hero-card,.hero-side,.aside,.main{padding:1.3rem}.head,.table-top,.panel-head{flex-direction:column}.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.zones.dual{grid-template-columns:1fr}}
+@media (max-width:520px){.summary{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="mark">FS</div>
+      <div>
+        <strong>FraudShield Studio</strong>
+        <span>Batch fraud review workspace</span>
+      </div>
+    </div>
+    <div class="nav-meta">
+      {% if model_stats and model_stats.roc_auc %}<span class="pill">ROC-AUC {{ "%.4f"|format(model_stats.roc_auc) }}</span>{% endif %}
+      <a href="/" class="nav-link">Project Overview</a>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">Fraud review console</div>
+      <h1>Upload data. <span>Surface risk.</span> Move faster.</h1>
+      <p>Upload one merged file or add transaction and identity CSVs separately, then review fraud predictions in one clean workspace built for large batch files.</p>
+      <div class="chips">
+        <span class="chip">PyArrow-backed loading</span>
+        <span class="chip">Saved preprocessor + model</span>
+        <span class="chip">Clickable risk shortlists</span>
+        <span class="chip">5 lakh+ record CSV ready</span>
+      </div>
+    </div>
+    <aside class="hero-side">
+      <h2>Live model snapshot</h2>
+      <p>Built for quick batch prediction, easy review, and clean handoff from upload to shortlist.</p>
+      <div class="stat"><div class="k">Best model</div><div class="v">{{ model_stats.name if model_stats and model_stats.name else "Not Available" }}</div></div>
+      <div class="stat"><div class="k">Validation ROC-AUC</div><div class="v">{% if model_stats and model_stats.roc_auc %}{{ "%.4f"|format(model_stats.roc_auc) }}{% else %}--{% endif %}</div></div>
+    </aside>
+  </section>
+
+  <div class="messages">
+    {% if error %}<div class="message error"><strong>Prediction request needs attention</strong><span>{{ error }}</span></div>{% endif %}
+    {% if preview_note %}<div class="message info"><strong>Preview mode</strong><span>{{ preview_note }}</span></div>{% endif %}
+  </div>
+
+  <form class="workspace" method="POST" action="/predict" enctype="multipart/form-data">
+    <input type="hidden" name="upload_mode" id="upload_mode" value="merged"/>
+    <div class="workspace-grid">
+      <div class="aside">
+        <h2>Upload workflow</h2>
+        <p>Add one merged CSV, or upload transaction and identity files separately if they are not merged yet. Large CSV batches are supported.</p>
+        <div class="steps">
+          <div class="step"><span>Step 01</span><strong>Pick merged or separate mode</strong></div>
+          <div class="step"><span>Step 02</span><strong>Upload IEEE-CIS compatible CSVs</strong></div>
+          <div class="step"><span>Step 03</span><strong>Review risk cards and download CSV</strong></div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="head">
+          <div>
+            <h2>Prediction intake</h2>
+            <p>The layout is optimized for quick review, clear upload choices, and easy transition from overview to shortlist.</p>
+          </div>
+          <div class="toggle">
+            <button type="button" class="mode-btn active" id="btn-merged" onclick="setMode('merged')">Merged CSV</button>
+            <button type="button" class="mode-btn" id="btn-separate" onclick="setMode('separate')">Separate files</button>
+          </div>
+        </div>
+
+        <div id="zone-merged" class="zones">
+          <label class="zone">
+            <input type="file" name="merged_file" id="merged_file" accept=".csv" onchange="showFileName(this,'merged-name')"/>
+            <span class="tag">Single input</span>
+            <h3>Upload merged prediction file</h3>
+            <p>Use this when transaction and identity columns are already present in one CSV.</p>
+            <div class="list">
+              <span>Required: TransactionID, TransactionAmt, card1</span>
+              <span>Optional IEEE-CIS transaction and identity fields accepted</span>
+            </div>
+            <div class="file-selected" id="merged-name"></div>
+          </label>
+        </div>
+
+        <div id="zone-separate" class="zones dual" style="display:none">
+          <label class="zone">
+            <input type="file" name="tx_file" id="tx_file" accept=".csv" onchange="showFileName(this,'tx-name')"/>
+            <span class="tag">Transaction file</span>
+            <h3>Upload transaction CSV</h3>
+            <p>This is the left side of the merge and drives the scoring pass.</p>
+            <div class="list">
+              <span>Required: TransactionID, TransactionAmt, card1</span>
+              <span>Optional C, D, M, V and other transaction columns supported</span>
+            </div>
+            <div class="file-selected" id="tx-name"></div>
+          </label>
+          <label class="zone">
+            <input type="file" name="id_file" id="id_file" accept=".csv" onchange="showFileName(this,'id-name')"/>
+            <span class="tag">Identity file</span>
+            <h3>Upload identity CSV</h3>
+            <p>Identity rows are merged with a left join on <code>TransactionID</code>.</p>
+            <div class="list">
+              <span>Required: TransactionID</span>
+              <span>Both id_01 and id-01 column styles are accepted</span>
+            </div>
+            <div class="file-selected" id="id-name"></div>
+          </label>
+        </div>
+
+        <div class="guide">
+          <strong>Format guide</strong>
+          <div class="subcopy">Required fields are handled clearly, optional columns are filled safely, and the page is ready for large CSV uploads.</div>
+        </div>
+
+        <div class="actions">
+          <div class="subcopy">Supports merged and separate uploads, including 5 lakh+ row CSV batches.</div>
+          <button type="submit" class="btn-primary">Run fraud detection</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {% if results %}
+  <section>
+    <div class="results-head">
+      <div>
+        <h2>Prediction output</h2>
+        <p>Click a risk card to filter the preview table and load matching TransactionIDs instantly.</p>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="card"><div class="kicker">Volume</div><div class="value total">{{ summary.total }}</div><div class="label">Transactions scored in the current run.</div></div>
+      <div class="card clickable" data-risk-card="HIGH" onclick="openRiskPanel('HIGH')"><div class="kicker">Priority</div><div class="value high">{{ summary.high }}</div><div class="label">High-risk rows. Click to shortlist.</div></div>
+      <div class="card clickable" data-risk-card="MEDIUM" onclick="openRiskPanel('MEDIUM')"><div class="kicker">Review</div><div class="value medium">{{ summary.medium }}</div><div class="label">Medium-risk rows. Click to shortlist.</div></div>
+      <div class="card clickable" data-risk-card="NO_RISK" onclick="openRiskPanel('NO_RISK')"><div class="kicker">Clear</div><div class="value low">{{ summary.no_risk }}</div><div class="label">Low-risk rows. Click to shortlist.</div></div>
+      <div class="card"><div class="kicker">Fraud rate</div><div class="value pct">{{ summary.fraud_pct }}%</div><div class="label">Average probability {{ summary.avg_prob }}% in this batch.</div></div>
+    </div>
+
+    <div class="note">The orange, gold, and green cards act as live review controls, not just counters.</div>
+
+    <div class="panel" id="risk-panel">
+      <div class="panel-head">
+        <div><div class="panel-title" id="risk-panel-title">Selected risk transactions</div><div class="panel-meta" id="risk-panel-meta"></div></div>
+        <div class="panel-actions">
+          <button type="button" class="btn-secondary" id="risk-prev-btn" onclick="changeRiskPage(-1)">Prev page</button>
+          <button type="button" class="btn-secondary" id="risk-next-btn" onclick="changeRiskPage(1)">Next page</button>
+          <button type="button" class="btn-secondary" onclick="clearRiskPanel()">Clear filter</button>
+        </div>
+      </div>
+      <div class="risk-list" id="risk-list"></div>
+      <div class="empty" id="risk-panel-empty">No matching rows were found for this risk bucket in the current saved prediction file.</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-top">
+        <div><div class="table-title">Results preview</div><div class="subcopy">Top {{ summary.preview_rows }} rows are shown here. Download the full prediction output any time.</div></div>
+        <a href="/download" class="btn-download" onclick="showDownloadHint()">Download CSV</a>
+      </div>
+      <div class="download-meta">Download the full prediction output as CSV for your review or reporting workflow.</div>
+      <div class="wrap">
+        <table id="results-table">
+          <thead><tr><th>S.No</th><th>Transaction ID</th><th>Fraud Probability</th><th>Risk Factor</th><th>Prediction</th></tr></thead>
+          <tbody>
+            {% for row in results %}
+            {% set prob = row.FraudProbability %}
+            {% if prob > 70 %}{% set cls = "high" %}{% elif prob > 40 %}{% set cls = "medium" %}{% else %}{% set cls = "low" %}{% endif %}
+            <tr data-risk="{{ row.RiskFactor }}">
+              <td class="sno">{{ row.SNo }}</td>
+              <td class="txn">{{ row.TransactionID }}</td>
+              <td><div class="prob"><span class="prob-text prob-{{ cls }}">{{ prob }}%</span><div class="bar"><div class="fill fill-{{ cls }}" style="width:{{ prob }}%"></div></div></div></td>
+              <td><span class="badge risk-{{ row.RiskFactor }}">{{ row.RiskFactor | replace('_', ' ') }}</span></td>
+              <td class="pred-{{ row.Prediction }}">{% if row.Prediction == 1 %}Fraud{% else %}Legit{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <div class="footer">Built for large-batch fraud screening with saved artifacts, shortlist filters, and browser-friendly review flow.</div>
+</main>
+
+<div class="toast" id="download-toast"></div>
+
+<script>
+let activeRiskFactor = null, activeRiskPage = 1, downloadToastTimer = null;
+const riskPageSize = 200;
+
+function setMode(mode){
+  document.getElementById('upload_mode').value = mode;
+  document.getElementById('btn-merged').classList.toggle('active', mode === 'merged');
+  document.getElementById('btn-separate').classList.toggle('active', mode === 'separate');
+  document.getElementById('zone-merged').style.display = mode === 'merged' ? 'grid' : 'none';
+  document.getElementById('zone-separate').style.display = mode === 'separate' ? 'grid' : 'none';
+}
+function showFileName(input, labelId){
+  const el = document.getElementById(labelId);
+  if(input.files && input.files[0]){ el.textContent = 'Selected: ' + input.files[0].name; el.style.display = 'block'; }
+}
+function highlightRiskCard(risk){ document.querySelectorAll('[data-risk-card]').forEach((card) => card.classList.toggle('selected', card.dataset.riskCard === risk)); }
+function filterPreviewTable(risk){ document.querySelectorAll('#results-table tbody tr').forEach((row) => { row.style.display = !risk || row.dataset.risk === risk ? '' : 'none'; }); }
+function renderRiskTransactions(payload){
+  document.getElementById('risk-panel').style.display = 'block';
+  document.getElementById('risk-panel-title').textContent = payload.display_risk_factor + ' transactions';
+  document.getElementById('risk-panel-meta').innerHTML = 'Total matches: <strong>' + payload.total_count + '</strong><br/>Showing page <strong>' + payload.page + '</strong> of <strong>' + payload.total_pages + '</strong>';
+  const list = document.getElementById('risk-list'), empty = document.getElementById('risk-panel-empty');
+  list.innerHTML = '';
+  if(!payload.transactions || payload.transactions.length === 0){ empty.style.display = 'block'; } else {
+    empty.style.display = 'none';
+    payload.transactions.forEach((row) => {
+      const item = document.createElement('div');
+      item.className = 'risk-item';
+      item.innerHTML = '<strong>' + row.TransactionID + '</strong><span>' + row.FraudProbability + '% probability · ' + (row.Prediction === 1 ? 'Fraud prediction' : 'Legit prediction') + '</span>';
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('risk-prev-btn').disabled = payload.page <= 1;
+  document.getElementById('risk-next-btn').disabled = payload.page >= payload.total_pages;
+}
+async function openRiskPanel(risk){ activeRiskFactor = risk; activeRiskPage = 1; highlightRiskCard(risk); filterPreviewTable(risk); await loadRiskTransactions(); }
+async function loadRiskTransactions(){
+  if(!activeRiskFactor) return;
+  document.getElementById('risk-panel').style.display = 'block';
+  document.getElementById('risk-panel-title').textContent = 'Loading shortlist...';
+  document.getElementById('risk-panel-meta').textContent = 'Reading matching transactions from the current prediction results.';
+  document.getElementById('risk-list').innerHTML = '';
+  document.getElementById('risk-panel-empty').style.display = 'none';
+  const response = await fetch('/risk-transactions/' + encodeURIComponent(activeRiskFactor) + '?page=' + activeRiskPage + '&page_size=' + riskPageSize);
+  if(!response.ok){
+    document.getElementById('risk-panel-title').textContent = 'Could not load shortlist';
+    document.getElementById('risk-panel-meta').textContent = 'Run prediction again and retry the selected risk card.';
+    document.getElementById('risk-prev-btn').disabled = true;
+    document.getElementById('risk-next-btn').disabled = true;
+    return;
+  }
+  renderRiskTransactions(await response.json());
+}
+async function changeRiskPage(direction){ if(!activeRiskFactor) return; const nextPage = activeRiskPage + direction; if(nextPage < 1) return; activeRiskPage = nextPage; await loadRiskTransactions(); }
+function clearRiskPanel(){ activeRiskFactor = null; activeRiskPage = 1; document.getElementById('risk-panel').style.display = 'none'; highlightRiskCard(''); filterPreviewTable(null); }
+function showDownloadHint(){
+  const toast = document.getElementById('download-toast');
+  toast.textContent = 'Browser download started.';
+  toast.classList.add('show');
+  if(downloadToastTimer) clearTimeout(downloadToastTimer);
+  downloadToastTimer = setTimeout(() => toast.classList.remove('show'), 3600);
+}
+window.addEventListener('DOMContentLoaded', () => { const results = document.querySelector('.table-card'); if(results) results.scrollIntoView({behavior:'smooth', block:'start'}); });
+</script>
+</body>
+</html>
