@@ -186,8 +186,6 @@ python-dotenv==1.0.0
 python-json-logger==4.0.0
 python-multipart==0.0.22
 pytz==2024.2
-pywin32==311
-pywinpty==3.0.3
 PyYAML==6.0.1
 pyzmq==27.1.0
 querystring-parser==1.2.4
