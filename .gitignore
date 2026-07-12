@@ -19,21 +19,42 @@ pip-wheel-metadata/
 venv/
 env/
 ENV/
+data/
+/data
+data/test_identity.csv
+
 
 # Environment files
 .env
 .env.*
 
 # Generated ML artifacts
-artifacts/
+artifacts/feature_engineering/
+artifacts/predictions/
+artifacts/smoke_uploads/
+artifacts/temp_uploads/
+artifacts/tmplz_tadw9/
+artifacts/raw.parquet
+artifacts/test_transformed.parquet
+artifacts/train_transformed.parquet
+artifacts/test.parquet
+artifacts/train.parquet
+artifacts/val.parquet
+artifacts/confusion_matrix.png
+artifacts/roc_curve.png
 catboost_info/
+
 logs/
 *.log
-
+data/*
 # Local datasets
-notebooks/data/*
-!notebooks/data/.gitkeep
 
+notebooks/data
+notebooks/data/train_transaction.csv
+notebooks/data/test_transaction.csv
+notebooks/data/train_identity.csv
+notebooks/data/test_identity.csv
+notebooks/EDA_output_Graphs
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb_checkpoints

@@ -133,7 +133,7 @@ tbody td{padding:.9rem 1rem;border-bottom:1px solid rgba(56,125,50,.08);font-siz
         <div class="head">
           <div>
             <h2>Prediction intake</h2>
-            <p>The layout is optimized for quick review, clear upload choices, and easy transition from overview to shortlist.</p>
+            
           </div>
           <div class="toggle">
             <button type="button" class="mode-btn active" id="btn-merged" onclick="setMode('merged')">Merged CSV</button>
@@ -145,8 +145,8 @@ tbody td{padding:.9rem 1rem;border-bottom:1px solid rgba(56,125,50,.08);font-siz
           <label class="zone">
             <input type="file" name="merged_file" id="merged_file" accept=".csv" onchange="showFileName(this,'merged-name')"/>
             <span class="tag">Single input</span>
-            <h3>Upload merged prediction file</h3>
-            <p>Use this when transaction and identity columns are already present in one CSV.</p>
+            <h3>Upload merged file</h3>
+            <p>Use this when transaction and identity columns are already present in one CSV means merge file of Transaction and identity of IEEE format file.</p>
             <div class="list">
               <span>Required: TransactionID, TransactionAmt, card1</span>
               <span>Optional IEEE-CIS transaction and identity fields accepted</span>
@@ -182,7 +182,7 @@ tbody td{padding:.9rem 1rem;border-bottom:1px solid rgba(56,125,50,.08);font-siz
 
         <div class="guide">
           <strong>Format guide</strong>
-          <div class="subcopy">Required fields are handled clearly, optional columns are filled safely, and the page is ready for large CSV uploads.</div>
+          <div class="subcopy">Required fields are Shown in Upload drag box.</div>
         </div>
 
         <div class="actions">

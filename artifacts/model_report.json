@@ -1,0 +1,23 @@
+{
+    "LightGBM": {
+        "roc_auc": 0.927447,
+        "accuracy": 0.964008,
+        "f1_score": 0.530224
+    },
+    "XGBoost": {
+        "roc_auc": 0.904995,
+        "accuracy": 0.884487,
+        "f1_score": 0.311134
+    },
+    "CatBoost": {
+        "roc_auc": 0.906819,
+        "accuracy": 0.882802,
+        "f1_score": 0.30873
+    },
+    "best_model": {
+        "name": "LightGBM",
+        "roc_auc": 0.927447,
+        "accuracy": 0.964008,
+        "f1_score": 0.530224
+    }
+}
